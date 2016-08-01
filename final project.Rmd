@@ -1,0 +1,133 @@
+---
+title: "Final Project"
+author: "chinonso obodoechi"
+date: "August 1, 2016"
+output: word_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+#Question 1: 1.	Calculate the rate at which the population would grow in 5 years 
+
+
+population.total.r <- read.csv("population total r.csv",stringsAsFactors = F,header=T)
+Population.growth.percentage<- read.csv("Population growth (annual %).csv",stringsAsFactors = F, header = T)
+y<-as.numeric(Population.growth.percentage[2,2:ncol(Population.growth.percentage)])
+x<-(1980:2010)
+
+for (i in 1:nrow(Population.growth.percentage)){
+  y<-as.numeric(Population.growth.percentage[i,2:ncol(Population.growth.percentage)])
+  lmfit<-lm(y~x)
+  z[i]<-as.numeric(Population.growth.percentage[i,ncol(Population.growth.percentage)])+5*summary(lmfit)$coefficients["x","Estimate"]
+  
+}
+Population.growth.percentage$X2015<-z
+View(Population.growth.percentage)
+
+#Result: Comparing the annual population growth for 2010 with 2015, you would see that some countries would grow almost exponential and some would would decrease as well. 
+
+
+```
+
+
+
+
+
+```{r}
+#Question 2 : 2.	Calculate the migration rate in 5 years 
+
+Net.migation <- read.csv("Net migation.csv", stringsAsFactors=F)
+for (i in 1:nrow(Net.migation)){
+  for (j in 1:ncol(Net.migation)){
+    if (identical(Net.migation[i,j],"..")){
+      Net.migation[i,j]<-0
+    }
+    
+  }
+}
+population_total_r<-read.csv("population total r.csv", stringsAsFactors = F, header = T, na.strings = c(""), strip.white = T)
+for (i in 1:nrow(population_total_r)){
+  for (j in 1:ncol(population_total_r)){
+    if (identical(population_total_r[i,j],"..")){
+      population_total_r[i,j]<-"NA"
+    }
+    
+  }
+}
+migration_rate<-mat.or.vec(nrow(Net.migation),ncol(Net.migation)-1)
+for (i in 1:nrow(Net.migation)){
+  for (j in 2:ncol(Net.migation)){
+    migration_rate[i,j-1]<- as.numeric(Net.migation[i,j])/as.numeric(population_total_r[i,j])
+  }
+}
+
+final_migration_rate<-migration_rate[,c(3,8,13,18,23,28)]
+z<-mat.or.vec(nrow(final_migration_rate),1)
+x<-c(1982,1987,1992,1997,2002,2007)
+for (i in 1:nrow(final_migration_rate)){
+  y<-as.numeric(final_migration_rate[i,1:ncol(final_migration_rate)])
+  lmfit<-lm(y~x)
+  z[i]<-as.numeric(final_migration_rate[i,ncol(final_migration_rate)])+8*summary(lmfit)$coefficients["x","Estimate"]
+  
+}
+#The Net Migration Rate in 2015 is Z Vec
+View(z)
+
+
+```
+
+
+
+
+
+```{r}
+#Question 3 : 3.	Calculate the death rate in 5 years
+
+
+death_rate <- read.csv("Death rate(per 1000 people).csv", stringsAsFactors=FALSE)
+for (i in 1:nrow(death_rate)){
+  for (j in 1:ncol(death_rate)){
+    if (identical(death_rate[i,j],"..")){
+      death_rate[i,j]<-"NA"
+    }
+    
+  }
+}
+
+x<-(1980:2010)
+z<-mat.or.vec(nrow(death_rate),1)
+i<-1
+for (i in 1:nrow(death_rate)){
+  for (j in 2:ncol(death_rate)){
+    if (identical(death_rate[i,j],"NA")){
+      z[i]=z[i]+1
+    }
+  }
+}
+i<-1
+finalz<-mat.or.vec(nrow(death_rate),1)
+while (i <nrow(death_rate)){
+  y<-as.numeric(death_rate[i,2:ncol(death_rate)])
+  if (z[i]<ncol(death_rate)-2){
+    lmfit<-lm(y~x)
+    finalz[i]<-as.numeric(death_rate[i,ncol(death_rate)])+5*summary(lmfit)$coefficients["x","Estimate"]
+  } else{
+    finalz[i]<-"NA"
+  }
+  i=i+1
+}
+finalz<-as.numeric(finalz)
+finalz
+```
+
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
