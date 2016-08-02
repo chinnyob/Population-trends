@@ -2,7 +2,7 @@
 title: "Final Project"
 author: "chinonso obodoechi"
 date: "August 1, 2016"
-output: word_document
+output: html_document
 ---
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
@@ -26,6 +26,10 @@ for (i in 1:nrow(Population.growth.percentage)){
 }
 Population.growth.percentage$X2015<-z
 View(Population.growth.percentage)
+
+pairs(Population.growth.percentage[,32:33])#Comparing 2010 to 2015(predicted year) 
+plot(Population.growth.percentage$X2010, Population.growth.percentage$X2015, main="2010 vs 2015 ", xlab="Population growth 2010", ylab="Population growth 2015")
+hist(Population.growth.percentage$X2015, main="Histogram of 2015 ", xlab="Population growth 2015" )
 
 #Result: Comparing the annual population growth for 2010 with 2015, you would see that some countries would grow almost exponential and some would would decrease as well. 
 
@@ -75,6 +79,8 @@ for (i in 1:nrow(final_migration_rate)){
 }
 #The Net Migration Rate in 2015 is Z Vec
 View(z)
+summary(z)
+hist(z)
 
 
 ```
@@ -120,14 +126,14 @@ while (i <nrow(death_rate)){
   i=i+1
 }
 finalz<-as.numeric(finalz)
-finalz
-```
-
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
+View(finalz) #viewed as a vector
+summary(finalz)
+plot(finalz, main="Death rate of the population in 2015 ", ylab="finalz(2015")
+hist(finalz, main="Histogram of the death rate in 2015", xlab = "Death rate of the population in 2015")
 
 ```
+
+
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
